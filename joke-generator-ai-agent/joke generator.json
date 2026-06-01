@@ -1,0 +1,127 @@
+{
+  "name": "joke generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "JOKE GENERTOR ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "TOPIC ",
+              "placeholder": "Write your joke topic ",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -384,
+        -64
+      ],
+      "id": "52702e0d-d86a-4408-9919-f7469c4d652a",
+      "name": "On form submission",
+      "webhookId": "97b5f16a-c76b-43e7-8c3a-e12614c3a70c"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=you are  a professional joke creator agent. write a 2 or 3 line joke on this topic  {{ $json['TOPIC '] }} in bangla language. dont extra word write without joke.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        -80
+      ],
+      "id": "b2d32536-c03b-41a3-b51d-7a559d331fe0",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        96
+      ],
+      "id": "2ec447ba-64db-40d2-88b5-2e56b478b5ba",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WovHN6xrnBlFcvTU",
+          "name": "Google Gemini(PaLM) Api account 95"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "={{ $json.output }}"
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        -80
+      ],
+      "id": "2bad1e46-e796-4962-afd0-38adbff38981",
+      "name": "Form",
+      "webhookId": "cc23738c-f800-4ab2-bef9-9b9ac7619440"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a05e61cf-8615-4f0b-bf35-e3df44c54770",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5f00bba974abf03cb5183d4d65f8a9645a781b04770df6a7d08284fca87d50b3"
+  },
+  "id": "USF5Bsrg1vCm3kEs",
+  "tags": []
+}
